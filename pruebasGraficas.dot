@@ -1,0 +1,26 @@
+digraph G {
+    splines="FALSE";
+
+    /* Entities */
+    // shortName [label="shortName", shape="rect"]
+    // shortName2 [label="cubito", shape="rect"]
+    nodo1[label = "fila1columna1", shape="rect"]
+    nodo2[label = "fila1columna2", shape="rect"]
+    nodo3[label = "fila1columna3", shape="rect"]
+    nodo4[label = "fila1columna4", shape="rect"]
+
+    
+    /* Relationships */
+    // F1 -> shortName[label=".63"]
+    // F1 -> shortName2[label=".hola"]
+    // shortName2 -> shortName
+    nodo1 -> nodo2
+    nodo1 -> nodo3
+    nodo2 -> nodo4
+    nodo3 -> nodo4
+
+    /* Ranks */
+    // { rank=same; shortName; shortName2 };
+    {rank=same; nodo1; nodo2}
+    {rank=same; nodo3, nodo4}
+}
