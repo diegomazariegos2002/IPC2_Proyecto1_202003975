@@ -1,6 +1,7 @@
 digraph G {
     splines="FALSE";
 
+    label = "contenedor"
     /* Entities */
     // shortName [label="shortName", shape="rect"]
     // shortName2 [label="cubito", shape="rect"]

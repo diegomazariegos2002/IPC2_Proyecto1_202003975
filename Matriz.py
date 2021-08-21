@@ -1,5 +1,7 @@
 from NodoPosicion import NodoEncabezado, NodoPosicion
 from EncabezadoMatriz import listaEncabezado
+#Librería utilizada para graficar grafos
+from graphviz import Graph
 
 class Matriz:
     def __init__(self):
@@ -112,6 +114,40 @@ class Matriz:
                 actual = actual.derecha
             eFila = eFila.siguiente
         return "ese nodo no existe"
+
+#Función encargada de imprimir por medio de la librería graphviz la matriz ortogonal en pdf.
+    def imprimirMatriz(self, nombreTerreno):
+        dot = Graph(comment='The Round Table')
+
+        dot.attr('node', shape = "plaintext")
+
+        dot.node('titulo',label=f'{nombreTerreno}',)
+
+        dot.attr('node', shape = "rectangle")
+        
+        eFila = self.eFilas.primero
+        print("=============================Matriz por FILAS=============================\n")
+        while eFila != None:
+            actual = eFila.accesoNodo
+            while actual != None:
+                #Creando los nodos donde antes de la "," hace referencia al id del nodo y después de la "," al valor del label osea
+                #el valor que aparece impreso en el nodo.
+                dot.node(f'{str(actual.fila)}{str(actual.columna)}',f'({str(actual.fila)},{str(actual.columna)}){str(actual.valor)}')
+                #Esta parte de if's son los responsables de crear la uniones entre los nodos a sus vez el constraint es que se utiliza
+                #para poner todos los nodos en sus respectivas posiciones.
+                if(actual.derecha != None):
+                    dot.edge(f'{str(actual.fila)}{str(actual.columna)}',f'{str(actual.derecha.fila)}{str(actual.derecha.columna)}',constraint = 'false')
+                if(actual.abajo != None):
+                    dot.edge(f'{str(actual.fila)}{str(actual.columna)}',f'{str(actual.abajo.fila)}{str(actual.abajo.columna)}',constraint = 'true')
+                actual = actual.derecha
+            eFila = eFila.siguiente
+
+        print(dot.source)  
+
+
+        # Guarde la fuente en el archivo y proporcione el motor Graphviz
+        dot.render('Terreno', view=True)
+
 
     #Esta función muestra la matriz por medio de filas pero con 0 los caminos no tomados 
     #y con 1 los caminos que son los mejores para llegar al camino mínimo de mi matriz.       

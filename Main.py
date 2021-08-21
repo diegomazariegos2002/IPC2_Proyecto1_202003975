@@ -4,6 +4,7 @@ from ListaTerrenos import ListaTerrenos
 from Matriz import Matriz
 
 listaTerrenos = ListaTerrenos()
+terrenoSeleccionado = ""
 
 
 #Función para cargar el archivo xml - generar el terreno - crear las listas ortogonales de cada posición en el terreno
@@ -34,6 +35,26 @@ def cargarArchivo(ruta):
             contador+=1
         # print(f"contador es igual a: {contador}")
 
+#Función para escribir el archivo de salida xml, también se especifica el nombre y ruta del archivo.
+def escribirArchivo(rutaSalida):
+    global terrenoSeleccionado
+
+    root = ET.Element( f"{terrenoSeleccionado}")
+    posicioninicio = ET.SubElement(root, "posicioninicio")
+    ET.SubElement(posicioninicio, "x").text = f"{str(listaTerrenos.getTerreno(terrenoSeleccionado).x1)}"
+    ET.SubElement(posicioninicio, "y").text = f"{str(listaTerrenos.getTerreno(terrenoSeleccionado).y2)}"
+    posicionfin = ET.SubElement(root, "posicionfin")
+    ET.SubElement(posicionfin, "x").text = f"{str(listaTerrenos.getTerreno(terrenoSeleccionado).x2)}"
+    ET.SubElement(posicionfin, "y").text = f"{str(listaTerrenos.getTerreno(terrenoSeleccionado).y2)}"
+    combustible = ET.SubElement(root, "combustible")
+    combustible.text = f"{str(listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().CombustibleCaminoMinimo)}"
+
+    for elementos in listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().listaCaminoMinimo:
+        posicion = ET.SubElement(root, "posicion", x = f"{elementos[1]}", y = f"{elementos[0]}")
+        posicion.text = listaTerrenos.getTerreno("terreno1").getPosiciones().getPesoNodo(int(elementos[0]),int(elementos[1]))
+
+    arbol = ET.ElementTree(root)
+    arbol.write(rutaSalida)
 
 #======================================================FUNCIÓN MAIN==================================================
 if __name__ == "__main__":
@@ -42,7 +63,7 @@ if __name__ == "__main__":
         ===================MENÚ=================
         1. Cargar archivo
         2. Procesar archivo
-        3. Escribir archivo salida
+        3. Escribir archivo de salida
         4. Mostrar datos del estudiante
         5. Generar gráfica
         6. Salida
@@ -50,31 +71,30 @@ if __name__ == "__main__":
         #Escogiendo una opción del menú
         opcion = int(input("Escoga una opción para continuar: "))
         if opcion == 1:
-            print("Escogió la opción 1")
-                # Filename = input('Ingrese nombre de archivo:')
-            # file = './' + Filename
-            file = "./prueba.xml"
-            cargarArchivo(file)
-            # listaTerrenos.mostrarTerrenos()
-            print(listaTerrenos.getTerreno("terreno2").getPosiciones().mostrarMatrizFilas())
-            # print(listaTerrenos.getTerreno("terreno1").getPosiciones().mostrarMatrizColumnas())
-            # print(listaTerrenos.getTerreno("terreno1").getPosiciones().getPesoNodo(4,3))
-            # print(listaTerrenos.getTerreno("terreno1").getPosiciones().getNodo(4,3))
-            # print(listaTerrenos.getTerreno("terreno1").getPosiciones().getNodo(1,2))
-            # listaTerrenos.getTerreno("terreno1").getPosiciones().recorrerProfundidadPrimeroMatriz(1,4)
-            listaTerrenos.getTerreno("terreno2").getPosiciones().caminoMinimoMatriz(1,1,4,6)
-            print(listaTerrenos.getTerreno("terreno2").getPosiciones().mostrarMatrizMejorCamino())
+            print("Escogió la opción 1 - Cargar archivo ")
+            terrenoSeleccionado = "terreno1"
+            rutaArchivo = input('Ingrese la ruta del archivo:')
+            cargarArchivo(rutaArchivo)
+            print(listaTerrenos.getTerreno("terreno1").getPosiciones().mostrarMatrizFilas())
+            # listaTerrenos.getTerreno("terreno1").getPosiciones().caminoMinimoMatriz(1,1,5,5)
+            # print(listaTerrenos.getTerreno("terreno1").getPosiciones().mostrarMatrizMejorCamino())
+            # listaTerrenos.getTerreno("terreno2").getPosiciones().imprimirMatriz("terreno2")
             input("Presione ENTER para continuar...")
         elif opcion == 2:
-            print("Escogió la opción 2")
+            print("Escogió la opción 2 - Procesar archivo")
         elif opcion == 3:
-            print("Escogió la opción 3")
+            print("Escogió la opción 3 - Escribir archivo de salida")
+            # Filename = input("Ingrese el nombre del archivo: ")
+            # file = './' + Filename
+            file = "./prueba2.xml"
+            escribirArchivo(file)
+            input("Presione ENTER para continuar...")
         elif opcion == 4:
-            print("Escogió la opción 4")
+            print("Escogió la opción 4 - Mostrar datos del estudiante")
         elif opcion == 5:
-            print("Escogió la opción 5")
+            print("Escogió la opción 5 - Generar gráfica")
         elif opcion == 6:
-            print("Escogió la opción 6")
+            print("Escogió la opción 6 - Salir")
             break
         else:
             print("Escoga una opción válida")
