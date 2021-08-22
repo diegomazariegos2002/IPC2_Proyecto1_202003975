@@ -115,7 +115,7 @@ class Matriz:
             eFila = eFila.siguiente
         return "ese nodo no existe"
 
-#Función encargada de imprimir por medio de la librería graphviz la matriz ortogonal en pdf.
+    #Función encargada de imprimir por medio de la librería graphviz la matriz ortogonal en pdf.
     def imprimirMatriz(self, nombreTerreno):
         dot = Graph(comment='The Round Table')
 
@@ -141,9 +141,6 @@ class Matriz:
                     dot.edge(f'{str(actual.fila)}{str(actual.columna)}',f'{str(actual.abajo.fila)}{str(actual.abajo.columna)}',constraint = 'true')
                 actual = actual.derecha
             eFila = eFila.siguiente
-
-        print(dot.source)  
-
 
         # Guarde la fuente en el archivo y proporcione el motor Graphviz
         dot.render('Terreno', view=True)

@@ -12,10 +12,7 @@ class Terrenos:
 
     def __str__(self):
         return f'''nombre del terreno: {self.nombre}
-        X inicial: {self.x1}
-        Y inicial: {self.y1}
-        X final: {self.x2}
-        Y final: {self.y2}'''
+        '''
 
     def getPosiciones(self):
         return self.matriz_Posiciones
