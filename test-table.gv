@@ -1,0 +1,11 @@
+// The Round Table
+graph {
+	node [shape=underline]
+	titulo [label=terreno1]
+	node [shape=rectangle]
+	11 [label="1,1"]
+	12 [label="1,2"]
+	21 [label="2,1"]
+	22 [label="2,2"]
+	11 -- 21 [constraint=true]
+}

@@ -13,7 +13,7 @@ class Matriz:
     def insertar(self, fila, columna, valor):
         nuevo = NodoPosicion(fila, columna, valor)
 
-        #Inserción encabezado por filas. (esto es extraído del video/conferencia) me sirvió mucho :D
+        #Inserción encabezado por filas. Ubicando posición en columnas (esto es extraído del video/conferencia) me sirvió mucho :D
         eFila = self.eFilas.getEncabezado(fila)
         if eFila == None:
             eFila = NodoEncabezado(fila)
@@ -39,7 +39,7 @@ class Matriz:
                     actual.derecha = nuevo
                     nuevo.izquierda = actual
 
-        #Inserción encabezado por columnas. (esto es extraído del video/conferencia) me sirvió mucho :D
+        #Inserción encabezado por columnas. Ubicando posición en las filas (esto es extraído del video/conferencia) me sirvió mucho :D
         eColumna = self.eColumnas.getEncabezado(columna)
         if eColumna == None:
             eColumna = NodoEncabezado(columna)
@@ -126,19 +126,18 @@ class Matriz:
         dot.attr('node', shape = "rectangle")
         
         eFila = self.eFilas.primero
-        print("=============================Matriz por FILAS=============================\n")
         while eFila != None:
             actual = eFila.accesoNodo
             while actual != None:
                 #Creando los nodos donde antes de la "," hace referencia al id del nodo y después de la "," al valor del label osea
                 #el valor que aparece impreso en el nodo.
-                dot.node(f'{str(actual.fila)}{str(actual.columna)}',f'({str(actual.fila)},{str(actual.columna)}){str(actual.valor)}')
+                dot.node(f'{str(actual)}',f'{str(actual.valor)}')
                 #Esta parte de if's son los responsables de crear la uniones entre los nodos a sus vez el constraint es que se utiliza
                 #para poner todos los nodos en sus respectivas posiciones.
                 if(actual.derecha != None):
-                    dot.edge(f'{str(actual.fila)}{str(actual.columna)}',f'{str(actual.derecha.fila)}{str(actual.derecha.columna)}',constraint = 'false')
+                    dot.edge(f'{str(actual)}',f'{str(actual.derecha)}',constraint = 'false')
                 if(actual.abajo != None):
-                    dot.edge(f'{str(actual.fila)}{str(actual.columna)}',f'{str(actual.abajo.fila)}{str(actual.abajo.columna)}',constraint = 'true')
+                    dot.edge(f'{str(actual)}',f'{str(actual.abajo)}',constraint = 'true')
                 actual = actual.derecha
             eFila = eFila.siguiente
 
@@ -158,7 +157,7 @@ class Matriz:
                 if self.buscarExistenciaEnLista(self.listaCaminoMinimo, [actual.fila, actual.columna]) == True:
                         matrizGrafica = matrizGrafica + f'''| 1 |'''
                 else:
-                        matrizGrafica= matrizGrafica + f'''| 0 |'''
+                        matrizGrafica= matrizGrafica + f'''|   |'''
                 actual = actual.derecha
             matrizGrafica = matrizGrafica + "\n"
             eFila = eFila.siguiente
@@ -199,6 +198,7 @@ class Matriz:
         self.dijkstra(nodoDestino, etiquetas, [])
         #la función .get aquí es una función de los diccionarios en python. (no confundir y pensar que fue creada aquí)
         self.CombustibleCaminoMinimo = etiquetas.get(nodoDestino)[0]
+        self.CombustibleCaminoMinimo += int(self.getPesoNodo(origenFila, origenColumna))
         # print("Combustible utilizado", self.CombustibleCaminoMinimo)
         self.listaCaminoMinimo = self.construirCaminodeRegreso(etiquetas, nodoOrigen, nodoDestino)
     
