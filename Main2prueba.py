@@ -3,10 +3,11 @@
 # from xml.dom import minidom
 # from ListaTerrenos import ListaTerrenos
 # from Matriz import Matriz
+# import time
 
 # listaTerrenos = ListaTerrenos()
 # terrenoSeleccionado = ""
-
+# combustibleAlmacenado = 9999
 
 # #Función para cargar el archivo xml - generar el terreno - crear las listas ortogonales de cada posición en el terreno
 # def cargarArchivo(ruta):
@@ -32,7 +33,7 @@
 #         for subelemento in elemento.iter('posicion'):
 #             # print("Posicion Y: ", subelemento.attrib['y'], "Posicion X: ", subelemento.attrib['x'], "Costo: ", subelemento.text)
 #             terreno = listaTerrenos.getTerreno(nombreTerreno) #buscando el terreno al cual le vamos agregar su matriz de posiciones
-#             terreno.matriz_Posiciones.insertar(subelemento.attrib['y'], subelemento.attrib['x'], subelemento.text)
+#             terreno.matriz_Posiciones.insertar(int(subelemento.attrib['x']),int(subelemento.attrib['y']), int(subelemento.text))
 #             contador+=1
 #         # print(f"contador es igual a: {contador}")
 
@@ -50,8 +51,8 @@
 #     combustible.text = f"{str(listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().CombustibleCaminoMinimo)}"
 
 #     for elementos in listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().listaCaminoMinimo:
-#         posicion = ET.SubElement(root, "posicion", x = f"{elementos[1]}", y = f"{elementos[0]}")
-#         posicion.text = listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().getPesoNodo(int(elementos[0]),int(elementos[1]))
+#         posicion = ET.SubElement(root, "posicion", x = f"{str(elementos[0])}", y = f"{str(elementos[1])}")
+#         posicion.text = str(listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().getPesoNodo(int(elementos[0]),int(elementos[1])))
 
 #     arbol = ET.ElementTree(root)
 #     arbol.write(rutaSalida)
@@ -100,13 +101,23 @@
 #                         x2 = int(listaTerrenos.getTerreno(terrenoSeleccionado).x2)
 #                         y2 = int(listaTerrenos.getTerreno(terrenoSeleccionado).y2)
 #                         #Llamando a funciones para el camino Minimo y mapeo del mismo
-#                         listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().caminoMinimoMatriz(y1,x1,y2,x2)
+#                         listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().caminoMinimoMatriz(x1,y1,x2,y2)
 #                         combustibleMejorCamino = listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().CombustibleCaminoMinimo
-#                         print(f"\nTerreno seleccionado: {terrenoSeleccionado}")
-#                         listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().mostrarMatrizMejorCamino()
-#                         print(f"El combustible total que la ruta consumirá es de: {combustibleMejorCamino} Unidades\n")
-#                     except:
-#                         print("\nNombre de terreno inválido, intenté de nuevo.")
+#                         print("Calculando la mejor ruta...")
+#                         time.sleep(2)
+#                         print("Calculando la cantidad de combustible...")
+#                         time.sleep(2)    
+#                         if((combustibleAlmacenado - combustibleMejorCamino) >= 0):
+#                             print(f"\nTerreno seleccionado: {terrenoSeleccionado}")
+#                             listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().mostrarMatrizMejorCamino()
+#                             print(f"El combustible total que la ruta consumirá es de: {combustibleMejorCamino} Unidades.\n")
+#                             combustibleAlmacenado -= combustibleMejorCamino
+#                             print(f"El combustible restante del robot es: {combustibleAlmacenado} Unidades.\n")
+#                         else:
+#                             terrenoSeleccionado = ""
+#                             print("\nNo existe camino mínimo para el destino deseado,\nya que todas las rutas posibles sobrepasan el limite de combustible almacenado.")
+#                     except Exception as e:
+#                         print(f"\nNombre de terreno inválido, intenté de nuevo. {e}")
                     
 #                 input("Presione ENTER para continuar...")
 #             elif opcion == 3:
@@ -121,8 +132,8 @@
 #                         escribirArchivo(rutaArchivo, terrenoSeleccionado)
 #                         print(f"Se escribió el archivo de salida del terreno procesado: {terrenoSeleccionado}")
 #                         print("Archivo de salida escrito con éxito.\n")
-#                     except:
-#                         print("Ingrese una ruta de salida válida.\n")
+#                     except Exception as e:
+#                         print(f"Ingrese una ruta de salida válida.{e}\n")
 
 #                 input("Presione ENTER para continuar...")
 #             elif opcion == 4:
