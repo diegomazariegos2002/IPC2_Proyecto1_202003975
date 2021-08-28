@@ -2,12 +2,13 @@ from NodoPosicion import NodoEncabezado, NodoPosicion
 from EncabezadoMatriz import listaEncabezado
 #Librería utilizada para graficar grafos
 from graphviz import Graph
+from ListaCaminoMinimo import ListaCaminoMinimo
 
 class Matriz:
     def __init__(self):
         self.eFilas = listaEncabezado()
         self.eColumnas = listaEncabezado()
-        self.listaCaminoMinimo = []
+        self.listaCaminoMinimo2 = ListaCaminoMinimo()
         self.CombustibleCaminoMinimo = None
     
     def insertar(self, fila, columna, valor):
@@ -147,14 +148,31 @@ class Matriz:
 
     #Esta función muestra la matriz por medio de filas pero con 0 los caminos no tomados 
     #y con 1 los caminos que son los mejores para llegar al camino mínimo de mi matriz.       
-    def mostrarMatrizMejorCamino(self):
+    # def mostrarMatrizMejorCamino(self):
+    #     matrizGrafica = ''''''
+    #     eFila = self.eFilas.primero
+    #     print("=============================Matriz Con Camino Mínimo=============================\n")
+    #     while eFila != None:
+    #         actual = eFila.accesoNodo
+    #         while actual != None:
+    #             if self.buscarExistenciaEnLista(self.listaCaminoMinimo, [actual.fila, actual.columna]) == True:
+    #                     matrizGrafica = matrizGrafica + f'''| 1 |'''
+    #             else:
+    #                     matrizGrafica= matrizGrafica + f'''|   |'''
+    #             actual = actual.derecha
+    #         matrizGrafica = matrizGrafica + "\n"
+    #         eFila = eFila.siguiente
+    #     print(matrizGrafica)
+
+    #CAMBIO
+    def mostrarMatrizMejorCamino2(self):
         matrizGrafica = ''''''
         eFila = self.eFilas.primero
         print("=============================Matriz Con Camino Mínimo=============================\n")
         while eFila != None:
             actual = eFila.accesoNodo
             while actual != None:
-                if self.buscarExistenciaEnLista(self.listaCaminoMinimo, [actual.fila, actual.columna]) == True:
+                if self.listaCaminoMinimo2.buscarExistencia(actual.fila, actual.columna) == True:
                         matrizGrafica = matrizGrafica + f'''| 1 |'''
                 else:
                         matrizGrafica= matrizGrafica + f'''|   |'''
@@ -172,23 +190,23 @@ class Matriz:
         return False
 
     #Función para recorrer todo mi matriz de nodos desde un nodo cualquiera elegido
-    def recorrerProfundidadPrimeroMatriz(self, origenFila, origenColumna, elementosRecorridos = []):
-        #aquí se aguarda el objeto NodoPosicion como tal el cual su espacio en memoria funciona como id
-        nodoActual = self.getNodo(origenFila, origenColumna)
-        #si nodoActual existe en la lista de elementos recorridos
-        if nodoActual in elementosRecorridos:
-            return
-        print("Nodo en la fila: ", nodoActual.fila, "Nodo en la columna: ", nodoActual.columna)
-        elementosRecorridos.append(nodoActual)
-        #Vecinos del grafo/nodo en la matriz ----- Parte recursiva del programa
-        if nodoActual.derecha != None:
-            self.recorrerProfundidadPrimeroMatriz(int(nodoActual.derecha.fila), int(nodoActual.derecha.columna), elementosRecorridos)
-        if nodoActual.izquierda != None:
-            self.recorrerProfundidadPrimeroMatriz(int(nodoActual.izquierda.fila), int(nodoActual.izquierda.columna), elementosRecorridos)
-        if nodoActual.arriba != None:
-            self.recorrerProfundidadPrimeroMatriz(int(nodoActual.arriba.fila), int(nodoActual.arriba.columna), elementosRecorridos)
-        if nodoActual.abajo != None:
-            self.recorrerProfundidadPrimeroMatriz(int(nodoActual.abajo.fila), int(nodoActual.abajo.columna), elementosRecorridos)
+    # def recorrerProfundidadPrimeroMatriz(self, origenFila, origenColumna, elementosRecorridos = []):
+    #     #aquí se aguarda el objeto NodoPosicion como tal el cual su espacio en memoria funciona como id
+    #     nodoActual = self.getNodo(origenFila, origenColumna)
+    #     #si nodoActual existe en la lista de elementos recorridos
+    #     if nodoActual in elementosRecorridos:
+    #         return
+    #     print("Nodo en la fila: ", nodoActual.fila, "Nodo en la columna: ", nodoActual.columna)
+    #     elementosRecorridos.append(nodoActual)
+    #     #Vecinos del grafo/nodo en la matriz ----- Parte recursiva del programa
+    #     if nodoActual.derecha != None:
+    #         self.recorrerProfundidadPrimeroMatriz(int(nodoActual.derecha.fila), int(nodoActual.derecha.columna), elementosRecorridos)
+    #     if nodoActual.izquierda != None:
+    #         self.recorrerProfundidadPrimeroMatriz(int(nodoActual.izquierda.fila), int(nodoActual.izquierda.columna), elementosRecorridos)
+    #     if nodoActual.arriba != None:
+    #         self.recorrerProfundidadPrimeroMatriz(int(nodoActual.arriba.fila), int(nodoActual.arriba.columna), elementosRecorridos)
+    #     if nodoActual.abajo != None:
+    #         self.recorrerProfundidadPrimeroMatriz(int(nodoActual.abajo.fila), int(nodoActual.abajo.columna), elementosRecorridos)
 
     #Función para determinar el camino minimo en la matriz.
     def caminoMinimoMatriz(self, origenFila, origenColumna, destinoFila, destinoColumna):
@@ -200,16 +218,26 @@ class Matriz:
         self.CombustibleCaminoMinimo = etiquetas.get(nodoDestino)[0]
         self.CombustibleCaminoMinimo += int(self.getPesoNodo(origenFila, origenColumna))
         # print("Combustible utilizado", self.CombustibleCaminoMinimo)
-        self.listaCaminoMinimo = self.construirCaminodeRegreso(etiquetas, nodoOrigen, nodoDestino)
+        # self.listaCaminoMinimo = self.construirCaminodeRegreso(etiquetas, nodoOrigen, nodoDestino)
+        #CAMBIO
+        self.construirCaminoRegreso2(etiquetas, nodoOrigen, nodoDestino)
     
     #Función para construir el camino de regreso una vez ya llegado al nodo de destino ---- esta función se ejecuta cuando
     #termina la recursividad de la función dijkstra y recorre todo el camino del destino al comienzo osea 
     # de final al comienzo realizando su recorrido mediante las etiquetas.
-    def construirCaminodeRegreso(self, etiquetas, origen, destino):
-        # print("[",origen.fila,"]","[",origen.columna,"]","->","[",destino.fila,"]","[",destino.columna,"]")
+    # def construirCaminodeRegreso(self, etiquetas, origen, destino):
+    #     # print("[",origen.fila,"]","[",origen.columna,"]","->","[",destino.fila,"]","[",destino.columna,"]")
+    #     if origen == destino:
+    #         return [[origen.fila, origen.columna]]
+    #     return self.construirCaminodeRegreso(etiquetas, origen, self.anterior(etiquetas[destino])) + [[destino.fila, destino.columna]]
+
+    #CAMBIO
+    def construirCaminoRegreso2(self, etiquetas, origen, destino):
         if origen == destino:
-            return [[origen.fila, origen.columna]]
-        return self.construirCaminodeRegreso(etiquetas, origen, self.anterior(etiquetas[destino])) + [[destino.fila, destino.columna]]
+            return self.listaCaminoMinimo2.agregarNodoCaminoMinimo(origen.fila, origen.columna)
+        
+        self.construirCaminoRegreso2(etiquetas, origen, self.anterior(etiquetas[destino]))
+        return self.listaCaminoMinimo2.agregarNodoCaminoMinimo(destino.fila, destino.columna)
 
     #Una etiqueta es basicamente de la forma etiqueta(nodo)=(peso_Acumulado, nodo_Anterior) 
     def anterior(self, etiqueta):

@@ -50,9 +50,16 @@ def escribirArchivo(rutaSalida, terrenoSeleccionado):
     combustible = ET.SubElement(root, "combustible")
     combustible.text = f"{str(listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().CombustibleCaminoMinimo)}"
 
-    for elementos in listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().listaCaminoMinimo:
-        posicion = ET.SubElement(root, "posicion", x = f"{str(elementos[0])}", y = f"{str(elementos[1])}")
-        posicion.text = str(listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().getPesoNodo(int(elementos[0]),int(elementos[1])))
+    # for elementos in listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().listaCaminoMinimo:
+    #     posicion = ET.SubElement(root, "posicion", x = f"{str(elementos[0])}", y = f"{str(elementos[1])}")
+    #     posicion.text = str(listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().getPesoNodo(int(elementos[0]),int(elementos[1])))
+
+    #CAMBIO 
+    aux = listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().listaCaminoMinimo2.primero
+    while aux != None:
+        posicion = ET.SubElement(root, "posicion", x = f"{str(aux.fila)}", y = f"{str(aux.columna)}")
+        posicion.text = str(listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().getPesoNodo(int(aux.fila),int(aux.columna)))
+        aux = aux.sig
 
     arbol = ET.ElementTree(root)
     arbol.write(rutaSalida)
@@ -109,7 +116,9 @@ if __name__ == "__main__":
                         time.sleep(2)    
                         if((combustibleAlmacenado - combustibleMejorCamino) >= 0):
                             print(f"\nTerreno seleccionado: {terrenoSeleccionado}")
-                            listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().mostrarMatrizMejorCamino()
+                            # listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().mostrarMatrizMejorCamino()
+                            #CAMBIO
+                            listaTerrenos.getTerreno(terrenoSeleccionado).getPosiciones().mostrarMatrizMejorCamino2()
                             print(f"El combustible total que la ruta consumirá es de: {combustibleMejorCamino} Unidades.\n")
                             combustibleAlmacenado -= combustibleMejorCamino
                             print(f"El combustible restante del robot es: {combustibleAlmacenado} Unidades.\n")
